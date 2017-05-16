@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('createMessage', (message) => {
-		socket.emit('newMessage', {
+		io.emit('newMessage', {
 			email: message.email,
 			message: message.message
 		})
