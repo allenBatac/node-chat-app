@@ -14,19 +14,27 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
 	console.log('new user connected');
 
- 	socket.on('createEmailEvent', (newEmail) => {
- 		console.log('createEmailEvent ', newEmail);
- 	});
+	socket.emit('newUser', 'Hello! Welcome to the chat app!');
+
+	socket.broadcast.emit('anotherUser', 'New user joined the chat room!');
 
 	socket.on('disconnect', () => {
 		console.log('Client disconencted from server');
 	});
 
 	socket.on('createMessage', (message) => {
+		//to every socket
 		io.emit('newMessage', {
 			email: message.email,
 			message: message.message
-		})
+		});
+
+		//to every socket except this socket
+		/*socket.broadcast.emit('newMessage', {
+			email: message.email,
+			message: message.message
+		});*/
+
 	})
 });
 
