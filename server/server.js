@@ -14,9 +14,20 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
 	console.log('new user connected');
 
+ 	socket.on('createEmailEvent', (newEmail) => {
+ 		console.log('createEmailEvent ', newEmail);
+ 	});
+
 	socket.on('disconnect', () => {
 		console.log('Client disconencted from server');
 	});
+
+	socket.on('createMessage', (message) => {
+		socket.emit('newMessage', {
+			email: message.email,
+			message: message.message
+		})
+	})
 });
 
 server.listen(port, ()=>{
